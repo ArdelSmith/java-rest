@@ -14,6 +14,9 @@ public class PurchaseElement {
     private boolean isPurchaded;
     private String text;
 
+    public PurchaseElement(){
+
+    }
     public PurchaseElement(Long id, String text, Boolean status){
         this.id = id;
         this.text = text;
