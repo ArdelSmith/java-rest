@@ -4,10 +4,7 @@ import org.example.exceptions.NotFoundException;
 import org.example.model.PurchaseElement;
 import org.example.repository.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +29,22 @@ public class MainController {
     @GetMapping("{id}")
     public PurchaseElement findElement(@PathVariable Long id){
         return repository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    @PutMapping("{id}")
+    public void changeStatus(@PathVariable Long id, @RequestBody Boolean status){
+        var element = repository.findById(id).orElseThrow(NotFoundException::new);
+        element.setStatus(status);
+        repository.save(element);
+    }
+
+    @PostMapping
+    public void createElement(@RequestParam String text, @RequestParam Boolean status){
+        repository.save(new PurchaseElement(null, text, status));
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteElement(@PathVariable Long id){
+        repository.deleteById(id);
     }
 }

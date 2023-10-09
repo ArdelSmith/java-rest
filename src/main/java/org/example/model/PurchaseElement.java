@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class PurchaseElement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private boolean isPurchaded;
     private String text;
