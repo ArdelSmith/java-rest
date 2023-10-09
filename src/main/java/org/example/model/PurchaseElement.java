@@ -36,4 +36,7 @@ public class PurchaseElement {
         this.isPurchaded = status;
     }
 
+    public boolean getStatus(){ return this.isPurchaded;}
+
+    public Long getId(){return this.id;}
 }
