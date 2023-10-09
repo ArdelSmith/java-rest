@@ -14,7 +14,7 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    PurchaseRepository repository;
+    private PurchaseRepository repository;
 
     @GetMapping
     public List<PurchaseElement> list(){
@@ -32,7 +32,7 @@ public class MainController {
     }
 
     @PutMapping("{id}")
-    public void changeStatus(@PathVariable Long id, @RequestBody Boolean status){
+    public void changeStatus(@PathVariable Long id, @RequestParam Boolean status){
         var element = repository.findById(id).orElseThrow(NotFoundException::new);
         element.setStatus(status);
         repository.save(element);
