@@ -39,9 +39,11 @@ public class MainController {
     }
 
     @PostMapping
-    public void createElement(@RequestParam String text){
-        if (text == null || text.isBlank()) return;
-        repository.save(new PurchaseElement(null, text, false));
+    public PurchaseElement createElement(@RequestParam String text){
+            if (text == null || text.isBlank()) text = "Пустой элемент";
+            var purch = new PurchaseElement(null ,text, false);
+            repository.save(purch);
+            return purch;
     }
 
     @DeleteMapping("{id}")

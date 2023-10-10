@@ -1,16 +1,23 @@
 Vue.component('purchase-row', {
     props: ['purchase', 'purchases'],
-               template: '<div>' +
-                   '{{ purchase.text }}' + ' {{status}} ' +
-                   '<span style="position: absolute; right: 0">' +
-                       '<input type="button" value="Bought" @click="edit" />' +
-                       '<input type="button" value="X" @click="del" />' +
-                   '</span>' +
-                   '</div>',
+               template: `
+                                 <div>
+                                     <span>{{ purchase.text }}</span>
+                                     <span style="position: absolute; right: 0">
+                                         <span class="status" >{{ status }}</span>
+                                         <input type="button" :value="action" @click="edit"/>
+                                         <input type="button" value="X" @click="del" />
+                                     </span>
+                                 </div>
+                             `,
     computed: {
         status() {
             if (this.purchase.status) return 'Куплено'
             else return 'Не куплено';
+        },
+        action() {
+            if (this.purchase.status) return 'Отметить'
+            else return 'Снять отметку';
         }
     },
     methods: {
@@ -55,7 +62,11 @@ Vue.component('purchase-form',{
                 params: {
                     text: this.text
                 }
-            });
+            }).then(response => {
+                              if (response.ok) {
+                                  this.purchases.push(response.body);
+                              }
+           });
         }
     }
 });
@@ -66,7 +77,7 @@ var app = new Vue({
                 <div>
                     <purchase-form :purchases="purchases" :purchaseAttr="purchase" />
                     <purchase-row v-for="purchase in purchases" :key="purchase.id" :purchase="purchase"
-                    :purchases="purchases">
+                    :purchases="purchases" />
                 </div>
                `,
             data: {
