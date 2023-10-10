@@ -22,24 +22,22 @@ Vue.component('purchase-row', {
     },
     methods: {
         del: function() {
-                    purchases.remove({id: this.purchase.id}).then(result => {
-                        if (result.ok) {
-                            this.purchases.splice(this.purchases.indexOf(this.purchase), 1)
-                        }
-                    })
-                },
+            this.purchases.splice(this.purchases.indexOf(this.purchase), 1);
+            fetch(`/list/${this.purchase.id}`, {
+                  method: 'DELETE'
+                });
+        },
         edit: function(){
             this.editMethod(this.purchase);
         }
     }
-
 });
 
 
 
 
 Vue.component('purchase-form',{
-    props: ['purchases', 'purchaseAttr'],
+    props: ['purchases', 'purchase'],
     data: function(){
         return {
             text: ''
@@ -75,7 +73,7 @@ var app = new Vue({
             el: '#app',
             template:`
                 <div>
-                    <purchase-form :purchases="purchases" :purchaseAttr="purchase" />
+                    <purchase-form :purchases="purchases" :purchase="purchase" />
                     <purchase-row v-for="purchase in purchases" :key="purchase.id" :purchase="purchase"
                     :purchases="purchases" />
                 </div>
