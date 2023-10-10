@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("list")
 public class MainController {
 
     @Autowired
@@ -39,8 +39,8 @@ public class MainController {
     }
 
     @PostMapping
-    public void createElement(@RequestParam String text, @RequestParam Boolean status){
-        repository.save(new PurchaseElement(null, text, status));
+    public void createElement(@RequestParam String text){
+        repository.save(new PurchaseElement(null, text, false));
     }
 
     @DeleteMapping("{id}")
