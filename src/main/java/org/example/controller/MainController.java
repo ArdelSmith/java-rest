@@ -40,6 +40,7 @@ public class MainController {
 
     @PostMapping
     public void createElement(@RequestParam String text){
+        if (text == null || text.isBlank()) return;
         repository.save(new PurchaseElement(null, text, false));
     }
 

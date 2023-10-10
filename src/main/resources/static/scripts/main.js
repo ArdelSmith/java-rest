@@ -1,20 +1,53 @@
-Vue.component('message-form',{
-    props: ['messages', 'messageAttr'],
+Vue.component('purchase-row', {
+    props: ['purchase', 'purchases'],
+               template: '<div>' +
+                   '{{ purchase.text }}' + ' {{status}} ' +
+                   '<span style="position: absolute; right: 0">' +
+                       '<input type="button" value="Bought" @click="edit" />' +
+                       '<input type="button" value="X" @click="del" />' +
+                   '</span>' +
+                   '</div>',
+    computed: {
+        status() {
+            if (this.purchase.status) return 'Куплено'
+            else return 'Не куплено';
+        }
+    },
+    methods: {
+        del: function() {
+                    purchases.remove({id: this.purchase.id}).then(result => {
+                        if (result.ok) {
+                            this.purchases.splice(this.purchases.indexOf(this.purchase), 1)
+                        }
+                    })
+                },
+        edit: function(){
+            this.editMethod(this.purchase);
+        }
+    }
+
+});
+
+
+
+
+Vue.component('purchase-form',{
+    props: ['purchases', 'purchaseAttr'],
     data: function(){
         return {
             text: ''
         }
     },
     watch: {
-            messageAttr: function(newVal, oldVal) {
+            purchaseAttr: function(newVal, oldVal) {
                 this.text = newVal.text;
                 this.id = newVal.id;
             }
         },
     template:
         `<div>
-                <input type="text" placeholder="Write something" v-model="text" />
-                <input type="button" value="Save" @click="save" />
+                <input type="text" placeholder="Хочу купить..." v-model="text" />
+                <input type="button" value="Сохранить" @click="save" />
         </div>`,
     methods:{
         save: function(){
@@ -31,14 +64,13 @@ var app = new Vue({
             el: '#app',
             template:`
                 <div>
-                    <message-form :messages="messages" :messageAttr="message" />
-                    <li v-for="message in messages" :key="message.id">
-                                          {{ message.text }} - {{ message.status }}
-                    </li>
+                    <purchase-form :purchases="purchases" :purchaseAttr="purchase" />
+                    <purchase-row v-for="purchase in purchases" :key="purchase.id" :purchase="purchase"
+                    :purchases="purchases">
                 </div>
                `,
             data: {
-                messages: []
+                purchases: []
             },
             mounted: function() {
                 this.loadMessages();
@@ -46,7 +78,7 @@ var app = new Vue({
             methods: {
                 loadMessages: function() {
                     this.$http.get('/list').then(function(response) {
-                        this.messages = response.body;
+                        this.purchases = response.body;
                     });
                 }
             }
