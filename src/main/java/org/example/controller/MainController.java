@@ -32,9 +32,9 @@ public class MainController {
     }
 
     @PutMapping("{id}")
-    public void changeStatus(@PathVariable Long id, @RequestParam Boolean status){
+    public void changeStatus(@PathVariable Long id){
         var element = repository.findById(id).orElseThrow(NotFoundException::new);
-        element.setStatus(status);
+        element.setStatus(!element.getStatus());
         repository.save(element);
     }
 

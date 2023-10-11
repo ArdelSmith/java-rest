@@ -1,14 +1,28 @@
 Vue.component('purchase-row', {
     props: ['purchase', 'purchases'],
                template: `
-                                 <div>
+                                 <div v-if="this.purchase.status">
+                                     <br>
+                                     <div style="background-color: MediumSeaGreen">
                                      <span>{{ purchase.text }}</span>
-                                     <span style="position: absolute; right: 0">
-                                         <span class="status" >{{ status }}</span>
-                                         <input type="button" :value="action" @click="edit"/>
-                                         <input type="button" value="X" @click="del" />
-                                     </span>
+                                        <span style="position: absolute; right: 0">
+                                        <span class="status" >{{ status }}</span>
+                                        <input type="button" :value="action" @click="edit"/>
+                                        <input type="button" value="X" @click="del" />
+                                      </span>
+                                     </div>
                                  </div>
+                                 <div v-else="this.purchase.status">
+                                    <br>
+                                    <div style="background-color: Tomato">
+                                        <span>{{ purchase.text }}</span>
+                                            <span style="position: absolute; right: 0">
+                                            <span class="status" >{{ status }}</span>
+                                            <input type="button" :value="action" @click="edit"/>
+                                            <input type="button" value="X" @click="del" />
+                                        </span>
+                                    </div>
+                                  </div>
                              `,
     computed: {
         status() {
@@ -28,7 +42,10 @@ Vue.component('purchase-row', {
                 });
         },
         edit: function(){
-            this.editMethod(this.purchase);
+            this.purchase.status = (!this.purchase.status);
+            fetch(`/list/${this.purchase.id}`, {
+                              method: 'PUT'
+                });
         }
     }
 });
@@ -74,6 +91,7 @@ var app = new Vue({
             template:`
                 <div>
                     <purchase-form :purchases="purchases" :purchase="purchase" />
+                    <br>
                     <purchase-row v-for="purchase in purchases" :key="purchase.id" :purchase="purchase"
                     :purchases="purchases" />
                 </div>
